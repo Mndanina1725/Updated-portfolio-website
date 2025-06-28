@@ -1,0 +1,62 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background: repeating-linear-gradient(
+    0deg,
+    #f7f7f7,
+    #f7f7f7 1px,
+    #fff 1px,
+    #fff 24px
+  );
+  color: #333;
+  margin: 0;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+nav {
+  position: fixed;
+  top: 1rem;
+  right: 2rem;
+}
+
+nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+}
+
+.intro {
+  max-width: 600px;
+  margin: 4rem auto;
+}
+
+.intro ul {
+  list-style-type: "◆ ";
+  padding-left: 1rem;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background: none;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.signature {
+  font-family: 'Pacifico', cursive;
+  font-size: 2rem;
+}
+
+footer img {
+  width: 100px;
+  border-radius: 50%;
+  margin-top: 1rem;
+}
+
