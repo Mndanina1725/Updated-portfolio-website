@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- NEW: Font Awesome for hamburger icon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
@@ -20,11 +19,11 @@
       );
       color: #333;
       margin: 0;
-      padding: 2rem;
+      padding: 0 2rem;
       line-height: 1.6;
     }
 
-    /* NEW: Mobile-first navigation */
+    /* Mobile-first nav */
     nav {
       position: fixed;
       top: 1rem;
@@ -38,18 +37,16 @@
       text-decoration: none;
       color: #666;
       font-weight: 500;
-      display: none; /* Hidden by default on mobile */
+      display: none;
     }
 
-    /* NEW: Hamburger menu */
     .hamburger {
       font-size: 1.5rem;
       cursor: pointer;
-      display: block; /* Visible on mobile */
+      display: block;
       z-index: 100;
     }
 
-    /* NEW: Expanded menu state */
     nav.expanded a {
       display: block;
       margin: 0.5rem 0;
@@ -117,44 +114,28 @@
       text-decoration: none;
     }
 
-    /* 🪪 Hanging ID Card - UPDATED FOR MOBILE */
+    /* 🪪 Hanging ID Card - Now part of the regular page flow */
     .hanging-card-wrapper {
-      position: fixed;
-      top: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
+      margin-top: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      z-index: 10;
       animation: sway 5s ease-in-out infinite alternate;
       transform-origin: top center;
       width: 100px;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    /* NEW: ID card moves to top-center on mobile */
-    @media (min-width: 768px) {
-      .hanging-card-wrapper {
-        left: 150px;
-        transform: none;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .hanging-card-wrapper .strap {
-        height: 120px;
-      }
-    }
     .hanging-card-wrapper .strap {
       width: 4px;
-      height: 50px; /* Shorter strap on mobile */
+      height: 90px;
       background-color: #333;
       margin-bottom: -2px;
     }
 
     .id-card {
-      width: 120px; /* Slightly smaller on mobile */
+      width: 120px;
       height: 180px;
       background: white;
       border-radius: 8px;
@@ -166,16 +147,6 @@
       border: 1px solid #eee;
     }
 
-    @media (min-width: 768px) {
-      .id-card {
-        width: 150px;
-        height: 220px;
-      }
-      .hanging-card-wrapper .strap {
-        height: 100px;
-      }
-    }
-
     .id-photo {
       width: 60px;
       height: 60px;
@@ -183,13 +154,6 @@
       overflow: hidden;
       border: 2px solid #333;
       margin-bottom: 10px;
-    }
-
-    @media (min-width: 768px) {
-      .id-photo {
-        width: 80px;
-        height: 80px;
-      }
     }
 
     .id-photo img {
@@ -215,15 +179,6 @@
       color: #666;
     }
 
-    @media (min-width: 768px) {
-      .id-text h4 {
-        font-size: 14px;
-      }
-      .id-text p {
-        font-size: 11px;
-      }
-    }
-
     .id-barcode {
       width: 100%;
       height: 20px;
@@ -238,52 +193,40 @@
     }
 
     @media (min-width: 768px) {
+      .hanging-card-wrapper {
+        margin-top: 1rem;
+      }
+
+      .hanging-card-wrapper .strap {
+        height: 120px;
+      }
+
+      .id-card {
+        width: 150px;
+        height: 220px;
+      }
+
+      .id-photo {
+        width: 80px;
+        height: 80px;
+      }
+
+      .id-text h4 {
+        font-size: 14px;
+      }
+
+      .id-text p {
+        font-size: 11px;
+      }
+
       .id-barcode {
         height: 30px;
       }
     }
 
-    .id-label {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 8px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    @media (min-width: 768px) {
-      .id-label {
-        top: -25px;
-        font-size: 10px;
-      }
-    }
-
     @keyframes sway {
-      0% { transform: rotate(-6deg) translateX(-50%); }
-      100% { transform: rotate(6deg) translateX(-50%); }
-    }
-
-    @media (min-width: 768px) {
-      @keyframes sway {
-        0% { transform: rotate(-6deg); }
-        100% { transform: rotate(6deg); }
-      }
-    }
-
-    /* NEW: Prevent content overlap */
-    @media (max-width: 767px) {
-      body {
-        padding-top: 180px; /* Space for hanging card */
-      }
-      .intro {
-        margin-top: 2rem;
-      }
+      0% { transform: rotate(-6deg); }
+      100% { transform: rotate(6deg); }
     }
   </style>
 </head>
@@ -292,7 +235,6 @@
 <!-- 🪪 Hanging ID Card -->
 <div class="hanging-card-wrapper">
   <div class="strap"></div>
-
   <div class="id-card">
     <div class="id-photo">
       <img src="https://placehold.co/80x80?text=Mack" alt="Mack's ID photo">
@@ -306,7 +248,7 @@
   </div>
 </div>
 
-<!-- NEW: Hamburger navigation -->
+<!-- Hamburger Navigation -->
 <nav id="main-nav">
   <div class="hamburger" onclick="toggleNav()">
     <i class="fas fa-bars"></i>
@@ -346,14 +288,12 @@
   </footer>
 </main>
 
-<!-- NEW: Hamburger menu JavaScript -->
 <script>
   function toggleNav() {
     const nav = document.getElementById('main-nav');
     nav.classList.toggle('expanded');
   }
 
-  // Close menu when clicking a link
   document.querySelectorAll('nav a').forEach(link => {
     link.addEventListener('click', () => {
       document.getElementById('main-nav').classList.remove('expanded');
@@ -363,6 +303,7 @@
 
 </body>
 </html>
+
 
 
 
