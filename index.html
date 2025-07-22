@@ -23,21 +23,15 @@
       line-height: 1.6;
     }
 
-    /* Mobile-first nav */
+    /* NAVIGATION */
     nav {
       position: fixed;
       top: 1rem;
       right: 2rem;
       display: flex;
       align-items: center;
-    }
-
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #666;
-      font-weight: 500;
-      display: none;
+      z-index: 100;
+      flex-direction: row;
     }
 
     .hamburger {
@@ -47,19 +41,47 @@
       z-index: 100;
     }
 
-    nav.expanded a {
-      display: block;
-      margin: 0.5rem 0;
-    }
-
-    nav.expanded {
+    .nav-links {
+      display: none;
       flex-direction: column;
       background: white;
+      position: absolute;
+      top: 2.5rem;
+      right: 0;
       padding: 1rem;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      right: 1rem;
-      top: 1rem;
+    }
+
+    .nav-links a {
+      margin: 0.5rem 0;
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+    }
+
+    nav.expanded .nav-links {
+      display: flex;
+    }
+
+    @media (min-width: 768px) {
+      .hamburger {
+        display: none;
+      }
+
+      .nav-links {
+        display: flex !important;
+        flex-direction: row;
+        background: none;
+        position: static;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .nav-links a {
+        margin-left: 1.5rem;
+        margin-right: 0;
+      }
     }
 
     .intro {
@@ -114,7 +136,7 @@
       text-decoration: none;
     }
 
-    /* 🪪 Hanging ID Card - Now part of the regular page flow */
+    /* ID CARD */
     .hanging-card-wrapper {
       margin-top: 0;
       display: flex;
@@ -229,6 +251,7 @@
       100% { transform: rotate(6deg); }
     }
   </style>
+
 </head>
 <body>
 
@@ -253,11 +276,14 @@
   <div class="hamburger" onclick="toggleNav()">
     <i class="fas fa-bars"></i>
   </div>
-  <a href="#about">about</a>
-  <a href="#projects">projects</a>
-  <a href="#writing">writing</a>
-  <a href="#contact">contact</a>
+  <div class="nav-links">
+    <a href="#about">about</a>
+    <a href="#projects">projects</a>
+    <a href="#writing">writing</a>
+    <a href="#contact">contact</a>
+  </div>
 </nav>
+
 
 <main>
   <section class="intro">
@@ -275,7 +301,7 @@
     </ul>
 
     <button onclick="location.href='projects.html'">see what I've built </button>
-    <p>or, <a href="#">→ view my resume</a></p>
+    <p>or, <a href="#" style="color: black;">→ view my resume</a></p>
   </section>
 
   <footer>
