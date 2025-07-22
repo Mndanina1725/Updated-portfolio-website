@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* GENERAL PAGE STYLES */
     body {
       font-family: 'Inter', sans-serif;
       background: repeating-linear-gradient(
@@ -22,7 +23,68 @@
       line-height: 1.6;
     }
 
+    /* NAVIGATION */
+    nav {
+      position: fixed;
+      top: 1rem;
+      right: 2rem;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+      flex-direction: row;
+    }
 
+    .hamburger {
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: block;
+      z-index: 100;
+    }
+
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      background: white;
+      position: absolute;
+      top: 2.5rem;
+      right: 0;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links a {
+      margin: 0.5rem 0;
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+    }
+
+    nav.expanded .nav-links {
+      display: flex;
+    }
+
+    @media (min-width: 768px) {
+      .hamburger {
+        display: none;
+      }
+
+      .nav-links {
+        display: flex !important;
+        flex-direction: row;
+        background: none;
+        position: static;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .nav-links a {
+        margin-left: 1.5rem;
+        margin-right: 0;
+      }
+    }
+
+    /* REMAINING PROJECT PAGE STYLES (unchanged) */
     h1 {
       text-align: center;
       margin-bottom: 2rem;
@@ -35,7 +97,6 @@
       max-width: 500px;
       margin: 0 auto;
     }
-
 
     .project-card {
       background: white;
@@ -102,9 +163,23 @@
       border-color: #888;
     }
 
+
   </style>
+
 </head>
 <body>
+
+<nav id="main-nav">
+  <div class="hamburger" onclick="toggleNav()">
+    <i class="fas fa-bars"></i>
+  </div>
+  <div class="nav-links">
+    <a href="index.html#top">about</a>
+    <a href="projects.html">projects</a>
+    <a href="#contact">contact</a>
+  </div>
+</nav>
+
 
 <h1>Projects I've Built</h1>
 
@@ -205,3 +280,24 @@
     });
   });
 </script>
+
+<script>
+  // Toggle nav menu on mobile
+  function toggleNav() {
+    const nav = document.getElementById('main-nav');
+    nav.classList.toggle('expanded');
+  }
+
+  // Live search functionality
+  const searchInput = document.getElementById("searchInput");
+  const cards = document.querySelectorAll(".project-card");
+
+  searchInput.addEventListener("input", () => {
+    const term = searchInput.value.toLowerCase();
+    cards.forEach(card => {
+      const text = card.textContent.toLowerCase();
+      card.style.display = text.includes(term) ? "block" : "none";
+    });
+  });
+</script>
+
