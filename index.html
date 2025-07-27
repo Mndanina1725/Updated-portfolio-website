@@ -251,6 +251,21 @@
       0% { transform: rotate(-6deg); }
       100% { transform: rotate(6deg); }
     }
+
+    .resume-button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      text-decoration: none;
+      color: black;
+      font-weight: 500;
+      margin-top: 1rem;
+    }
+    .resume-button:hover {
+      background-color: #ddd;
+    }
+
   </style>
 
 </head>
@@ -301,7 +316,8 @@
     </ul>
 
     <button onclick="location.href='projects.html'">see what I've built </button>
-    <a href="rez/resume.pdf" target="_blank" style="color: black;">→ view my resume</a></p>
+    <a href="rez/resume.pdf" target="_blank" class="resume-button">→ view my resume</a>
+
   </section>
 
   <footer id="contact">
