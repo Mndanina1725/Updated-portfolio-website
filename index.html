@@ -1,27 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Mack Ndanina</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="icon" href="img/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Early theme set: prevents flash -->
+  <script>
+    (() => {
+      const KEY = 'theme';
+      const saved = localStorage.getItem(KEY);
+      const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (sysDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="img/favicon.png" type="image/png" />
+
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
+    /* THEME TOKENS */
+    :root {
+      --bg-stripe-1:#f7f7f7;
+      --bg-stripe-2:#ffffff;
+      --text:#333333;
+      --muted:#777777;
+      --card:#ffffff;
+      --border:#e5e7eb;
+    }
+    :root[data-theme="dark"] {
+      --bg-stripe-1:#0b0d10;
+      --bg-stripe-2:#10151c;
+      --text:#e6e8ec;
+      --muted:#a5acb8;
+      --card:#12151a;
+      --border:#23272f;
+    }
+
+    /* Base */
+    html, body {
+      font-family:'Inter', sans-serif;
+      margin:0;
+      padding:0 2rem;
+      line-height:1.6;
       background: repeating-linear-gradient(
         0deg,
-        #f7f7f7,
-        #f7f7f7 1px,
-        #fff 1px,
-        #fff 24px
+        var(--bg-stripe-1),
+        var(--bg-stripe-1) 1px,
+        var(--bg-stripe-2) 1px,
+        var(--bg-stripe-2) 24px
       );
-      color: #333;
-      margin: 0;
-      padding: 0 2rem;
-      line-height: 1.6;
+      color:var(--text);
+    }
+
+    /* Smooth theme transition */
+    @media (prefers-reduced-motion:no-preference){
+      * { transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
     }
 
     /* NAVIGATION */
@@ -33,256 +70,183 @@
       align-items: center;
       z-index: 100;
       flex-direction: row;
+      gap:.5rem;
     }
-
     .hamburger {
       font-size: 1.5rem;
       cursor: pointer;
       display: block;
       z-index: 100;
+      color:var(--text);
     }
-
     .nav-links {
-      display: none;
-      flex-direction: column;
-      background: white;
-      position: absolute;
-      top: 2.5rem;
-      right: 0;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display:none;
+      flex-direction:column;
+      background:var(--card);
+      position:absolute;
+      top:2.5rem;
+      right:0;
+      padding:1rem;
+      border-radius:8px;
+      border:1px solid var(--border);
+      box-shadow:0 4px 10px rgba(0,0,0,.1);
     }
-
     .nav-links a {
-      margin: 0.5rem 0;
-      text-decoration: none;
-      color: #666;
-      font-weight: 500;
+      margin:.5rem 0;
+      text-decoration:none;
+      color:var(--muted);
+      font-weight:500;
     }
+    nav.expanded .nav-links { display:flex; }
 
-    nav.expanded .nav-links {
-      display: flex;
+    /* Theme toggle */
+    .theme-toggle {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:32px;
+      height:32px;
+      border-radius:8px;
+      border:1px solid var(--border);
+      background:none;
+      cursor:pointer;
+      padding:0;
     }
+    #theme-icon {
+      font-size: 16px;
+      color: var(--muted);
+    }
+    .theme-toggle:hover #theme-icon {
+      color: var(--text);
+    }
+    .theme-toggle:focus { outline:none; box-shadow:none; }
 
     @media (min-width: 768px) {
-      .hamburger {
-        display: none;
-      }
-
+      .hamburger { display:none; }
       .nav-links {
-        display: flex !important;
-        flex-direction: row;
-        background: none;
-        position: static;
-        padding: 0;
-        box-shadow: none;
+        display:flex !important;
+        flex-direction:row;
+        background:none;
+        position:static;
+        padding:0;
+        box-shadow:none;
+        border:none;
       }
-
-      .nav-links a {
-        margin-left: 1.5rem;
-        margin-right: 0;
-      }
+      .nav-links a { margin-left:1.5rem; margin-right:0; }
     }
 
-    .intro {
-      max-width: 600px;
-      margin: 4rem auto;
+    .intro { max-width:600px; margin:4rem auto; }
+    .intro ul { list-style-type:"◆ "; padding-left:1rem; }
+
+    /* Minimal buttons */
+    .resume-button, button {
+      display:inline-block;
+      margin-top:1rem;
+      padding:.5rem 1rem;
+      border:1px solid var(--border);
+      background:none;
+      border-radius:6px;
+      text-decoration:none;
+      color:var(--text);
+      font-weight:500;
+      cursor:pointer;
+    }
+    .resume-button:hover, button:hover {
+      filter:brightness(1.2);
     }
 
-    .intro ul {
-      list-style-type: "◆ ";
-      padding-left: 1rem;
-    }
-
-    button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      border: 1px solid #ccc;
-      background: none;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    button:hover {
-      background: #333;
-      color: white;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 4rem;
-    }
+    footer { text-align:center; margin-top:4rem; }
 
     .signature-text {
-      font-family: 'Great Vibes', cursive;
-      font-size: 48px;
-      margin-top: 2rem;
-      position: relative;
-      display: inline-block;
+      font-family:'Great Vibes', cursive;
+      font-size:48px; margin-top:2rem;
+      position:relative; display:inline-block;
     }
-
     .signature-text::after {
-      content: "";
-      display: block;
-      height: 2px;
-      background-color: #000;
-      width: 100%;
-      margin-top: 8px;
+      content:"";
+      display:block;
+      height:2px;
+      background-color:var(--text);
+      width:100%;
+      margin-top:8px;
     }
 
     .social-icons a {
-      margin: 0 0.5rem;
-      color: #333;
-      text-decoration: none;
+      margin:0 .5rem;
+      color:var(--text);
+      text-decoration:none;
     }
 
     /* ID CARD */
     .hanging-card-wrapper {
-      margin-top: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: sway 5s ease-in-out infinite alternate;
+      margin-top:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      animation:sway 5s ease-in-out infinite alternate;
       transform-origin: top center;
-      width: 100px;
-      margin-left: auto;
-      margin-right: auto;
+      width:100px;
+      margin-left:auto;
+      margin-right:auto;
     }
-
     .hanging-card-wrapper .strap {
-      width: 4px;
-      height: 90px;
-      background-color: #333;
-      margin-bottom: -2px;
+      width:4px;
+      height:90px;
+      background-color:var(--text);
+      margin-bottom:-2px;
     }
-
     .id-card {
-      width: 120px;
-      height: 180px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border: 1px solid #eee;
+      width:120px; height:180px;
+      background:var(--card);
+      border-radius:8px;
+      box-shadow:0 4px 15px rgba(0,0,0,.15);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      border:1px solid var(--border);
     }
-
     .id-photo {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 2px solid #333;
-      margin-bottom: 10px;
+      width:60px; height:60px;
+      border-radius:50%;
+      overflow:hidden;
+      border:2px solid var(--text);
+      margin-bottom:10px;
     }
-
     .id-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width:100%; height:100%;
+      object-fit:cover;
     }
-
-    .id-text {
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .id-text h4 {
-      margin: 0;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .id-text p {
-      margin: 3px 0;
-      font-size: 10px;
-      color: #666;
-    }
-
+    .id-text { text-align:center; margin-bottom:8px; }
+    .id-text h4 { margin:0; font-size:12px; font-weight:600; }
+    .id-text p { margin:3px 0; font-size:10px; color:var(--muted); }
     .id-barcode {
-      width: 100%;
-      height: 20px;
+      width:100%; height:20px;
       background: repeating-linear-gradient(
         0deg,
-        #000,
-        #000 2px,
+        var(--text),
+        var(--text) 2px,
         transparent 2px,
         transparent 4px
       );
-      margin-top: auto;
+      margin-top:auto;
     }
 
-    @media (min-width: 768px) {
-      .hanging-card-wrapper {
-        margin-top: 1rem;
-      }
-
-      .hanging-card-wrapper .strap {
-        height: 120px;
-      }
-
-      .id-card {
-        width: 150px;
-        height: 220px;
-      }
-
-      .id-photo {
-        width: 80px;
-        height: 80px;
-      }
-
-      .id-text h4 {
-        font-size: 14px;
-      }
-
-      .id-text p {
-        font-size: 11px;
-      }
-
-      .id-barcode {
-        height: 30px;
-      }
+    @media (min-width:768px){
+      .hanging-card-wrapper { margin-top:1rem; }
+      .hanging-card-wrapper .strap { height:120px; }
+      .id-card { width:150px; height:220px; }
+      .id-photo { width:80px; height:80px; }
+      .id-text h4 { font-size:14px; }
+      .id-text p { font-size:11px; }
+      .id-barcode { height:30px; }
     }
 
     @keyframes sway {
-      0% { transform: rotate(-6deg); }
-      100% { transform: rotate(6deg); }
+      0% { transform:rotate(-6deg); }
+      100% { transform:rotate(6deg); }
     }
-
-    .resume-button {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background-color: #f0f0f0;
-      border-radius: 8px;
-      text-decoration: none;
-      color: black;
-      font-weight: 500;
-      margin-top: 1rem;
-    }
-    .resume-button:hover {
-      background-color: #ddd;
-    }
-
-
-    .resume.2-button {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background-color: #f0f0f0;
-      border-radius: 8px;
-      text-decoration: none;
-      color: black;
-      font-weight: 500;
-      margin-top: 1rem;
-    }
-    .resume.2-button:hover {
-      background-color: #ddd;
-    }
-
   </style>
-
 </head>
 <body id="top">
 
@@ -291,7 +255,7 @@
   <div class="strap"></div>
   <div class="id-card">
     <div class="id-photo">
-      <img src="https://placehold.co/80x80?text=Mack" alt="Mack's ID photo">
+      <img src="https://placehold.co/80x80?text=Mack" alt="Mack's ID photo" />
     </div>
     <div class="id-text">
       <h4>Mack Ndanina</h4>
@@ -302,8 +266,11 @@
   </div>
 </div>
 
-<!-- Hamburger Navigation -->
+<!-- Navigation -->
 <nav id="main-nav">
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+    <i id="theme-icon" class="fas fa-moon"></i>
+  </button>
   <div class="hamburger" onclick="toggleNav()">
     <i class="fas fa-bars"></i>
   </div>
@@ -314,7 +281,6 @@
   </div>
 </nav>
 
-
 <main>
   <section class="intro">
     <h1>Mack Ndanina</h1>
@@ -323,18 +289,15 @@
       <li>cs @ University of Saskatchewan</li>
       <li>currently:
         <ul>
-          <li>building a mobile app for University of Saskatchewan students </li>
-          <li>developed freelance web development for a local construction company ️</li>
-          <li>developed a website for a student-led non-profit </li>
+          <li>building a mobile app for University of Saskatchewan students</li>
+          <li>developed freelance web development for a local construction company</li>
+          <li>developed a website for a student-led non-profit</li>
         </ul>
       </li>
     </ul>
 
     <button onclick="location.href='projects.html'" class="resume-button">see what I've built</button>
     <a href="Intership%20Prep%202026/Job%20resume%20(1).pdf" target="_blank" class="resume-button">→ view my resume</a>
-    <link rel="icon" href="img/favicon.png" type="image/png">
-
-
   </section>
 
   <footer id="contact">
@@ -352,12 +315,48 @@
     const nav = document.getElementById('main-nav');
     nav.classList.toggle('expanded');
   }
-
   document.querySelectorAll('nav a').forEach(link => {
     link.addEventListener('click', () => {
       document.getElementById('main-nav').classList.remove('expanded');
     });
   });
+
+  // Theme toggle logic
+  (() => {
+    const KEY = 'theme';
+    const btn = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-icon');
+    const root = document.documentElement;
+
+    function setIcon(theme){
+      if(theme === 'dark'){
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    }
+    function apply(theme){
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem(KEY, theme);
+      setIcon(theme);
+    }
+
+    // init icon
+    setIcon(root.getAttribute('data-theme') || 'light');
+
+    btn?.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme') || 'light';
+      apply(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Follow system if user hasn't chosen
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener?.('change', e => {
+      if (!localStorage.getItem(KEY)) apply(e.matches ? 'dark' : 'light');
+    });
+  })();
 </script>
 
 </body>
