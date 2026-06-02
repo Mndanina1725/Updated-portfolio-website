@@ -5,270 +5,488 @@
   <title>Mack Ndanina</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Early theme set: prevents flash -->
   <script>
     (() => {
-      const KEY = 'theme';
-      const saved = localStorage.getItem(KEY);
+      const saved = localStorage.getItem('theme');
       const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = saved || (sysDark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', saved || (sysDark ? 'dark' : 'light'));
     })();
   </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="icon" href="img/favicon.png" type="image/png" />
 
   <style>
-    /* THEME TOKENS */
     :root {
-      --bg-stripe-1:#f7f7f7;
-      --bg-stripe-2:#ffffff;
-      --text:#333333;
-      --muted:#777777;
-      --card:#ffffff;
-      --border:#e5e7eb;
+      --bg: #f9f9f7;
+      --bg2: #ffffff;
+      --text: #1a1a1a;
+      --muted: #888;
+      --accent: #4f6ef7;
+      --accent2: #a78bfa;
+      --card: #ffffff;
+      --border: #e8e8e8;
+      --tag-bg: #f0f0f0;
+      --glow: rgba(79,110,247,0.12);
     }
     :root[data-theme="dark"] {
-      --bg-stripe-1:#0b0d10;
-      --bg-stripe-2:#10151c;
-      --text:#e6e8ec;
-      --muted:#a5acb8;
-      --card:#12151a;
-      --border:#23272f;
+      --bg: #0d0f14;
+      --bg2: #11141b;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --accent: #7c9cff;
+      --accent2: #c4b5fd;
+      --card: #13161e;
+      --border: #1f2330;
+      --tag-bg: #1a1d28;
+      --glow: rgba(124,156,255,0.1);
     }
 
-    /* Base */
-    html, body {
-      font-family:'Inter', sans-serif;
-      margin:0;
-      padding:0 2rem;
-      line-height:1.6;
-      background: repeating-linear-gradient(
-        0deg,
-        var(--bg-stripe-1),
-        var(--bg-stripe-1) 1px,
-        var(--bg-stripe-2) 1px,
-        var(--bg-stripe-2) 24px
-      );
-      color:var(--text);
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* Smooth theme transition */
-    @media (prefers-reduced-motion:no-preference){
-      * { transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* NAVIGATION */
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--accent), transparent 70%);
+      top: -100px; left: -100px;
+      animation: drift1 18s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, var(--accent2), transparent 70%);
+      bottom: 100px; right: -80px;
+      animation: drift2 22s ease-in-out infinite alternate;
+    }
+    @keyframes drift1 {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(60px, 80px); }
+    }
+    @keyframes drift2 {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(-50px, -60px); }
+    }
+
+    /* NAV */
     nav {
       position: fixed;
-      top: 1rem;
-      right: 2rem;
+      top: 1.25rem;
+      right: 1.5rem;
       display: flex;
       align-items: center;
-      z-index: 100;
-      flex-direction: row;
-      gap:.5rem;
-    }
-    .hamburger {
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: block;
-      z-index: 100;
-      color:var(--text);
+      gap: 0.5rem;
+      z-index: 200;
     }
     .nav-links {
-      display:none;
-      flex-direction:column;
-      background:var(--card);
-      position:absolute;
-      top:2.5rem;
-      right:0;
-      padding:1rem;
-      border-radius:8px;
-      border:1px solid var(--border);
-      box-shadow:0 4px 10px rgba(0,0,0,.1);
+      display: none;
+      flex-direction: column;
+      background: var(--card);
+      position: absolute;
+      top: 2.5rem;
+      right: 0;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      gap: 0.5rem;
     }
     .nav-links a {
-      margin:.5rem 0;
-      text-decoration:none;
-      color:var(--muted);
-      font-weight:500;
-    }
-    nav.expanded .nav-links { display:flex; }
-
-    /* Theme toggle */
-    .theme-toggle {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:32px;
-      height:32px;
-      border-radius:8px;
-      border:1px solid var(--border);
-      background:none;
-      cursor:pointer;
-      padding:0;
-    }
-    #theme-icon {
-      font-size: 16px;
+      text-decoration: none;
       color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
     }
-    .theme-toggle:hover #theme-icon {
-      color: var(--text);
+    .nav-links a:hover { color: var(--text); }
+    nav.expanded .nav-links { display: flex; }
+
+    .hamburger {
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 6px;
     }
-    .theme-toggle:focus { outline:none; box-shadow:none; }
+
+    .theme-toggle {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 14px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .theme-toggle:hover { color: var(--text); }
+    .theme-toggle:focus { outline: none; }
 
     @media (min-width: 768px) {
-      .hamburger { display:none; }
+      .hamburger { display: none; }
       .nav-links {
-        display:flex !important;
-        flex-direction:row;
-        background:none;
-        position:static;
-        padding:0;
-        box-shadow:none;
-        border:none;
+        display: flex !important;
+        flex-direction: row;
+        background: none;
+        position: static;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+        gap: 1.75rem;
       }
-      .nav-links a { margin-left:1.5rem; margin-right:0; }
     }
 
-    .intro { max-width:600px; margin:4rem auto; }
-    .intro ul { list-style-type:"◆ "; padding-left:1rem; }
-
-    /* Minimal buttons */
-    .resume-button, button {
-      display:inline-block;
-      margin-top:1rem;
-      padding:.5rem 1rem;
-      border:1px solid var(--border);
-      background:none;
-      border-radius:6px;
-      text-decoration:none;
-      color:var(--text);
-      font-weight:500;
-      cursor:pointer;
-    }
-    .resume-button:hover, button:hover {
-      filter:brightness(1.2);
+    /* MAIN LAYOUT */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
     }
 
-    footer { text-align:center; margin-top:4rem; }
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 4rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.35s;
+    }
+
+    .hero-sub {
+      margin-top: 1.25rem;
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.5s;
+    }
+
+    /* Typewriter cursor */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* CURRENTLY section */
+    .section {
+      margin-top: 5rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .section.visible { opacity: 1; transform: none; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .currently-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--border);
+    }
+
+    .currently-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1.25rem 1.5rem;
+      background: var(--card);
+      transition: background 0.2s;
+      cursor: default;
+    }
+    .currently-item:hover { background: var(--bg); }
+
+    .currently-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--tag-bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .currently-body {}
+    .currently-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .currently-detail {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      line-height: 1.5;
+    }
+
+    /* ACTIONS */
+    .actions {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.65s;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
+      transform: translateY(-1px);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 0 3px var(--glow);
+      filter: brightness(1.1);
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 6rem;
+      padding-bottom: 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
 
     .signature-text {
-      font-family:'Great Vibes', cursive;
-      font-size:48px; margin-top:2rem;
-      position:relative; display:inline-block;
+      font-family: 'Great Vibes', cursive;
+      font-size: 52px;
+      color: var(--text);
+      display: inline-block;
+      position: relative;
     }
     .signature-text::after {
-      content:"";
-      display:block;
-      height:2px;
-      background-color:var(--text);
-      width:100%;
-      margin-top:8px;
+      content: '';
+      display: block;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--text), transparent);
+      margin-top: 6px;
     }
 
+    .social-icons {
+      margin-top: 1.25rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
     .social-icons a {
-      margin:0 .5rem;
-      color:var(--text);
-      text-decoration:none;
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 15px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .social-icons a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-2px);
     }
 
-    /* ID CARD */
-    .hanging-card-wrapper {
-      margin-top:0;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      animation:sway 5s ease-in-out infinite alternate;
-      transform-origin: top center;
-      width:100px;
-      margin-left:auto;
-      margin-right:auto;
+    .footer-note {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.6;
     }
-    .hanging-card-wrapper .strap {
-      width:4px;
-      height:90px;
-      background-color:var(--text);
-      margin-bottom:-2px;
+
+    /* ID CARD — floating, smaller, tucked top right */
+    .id-card-wrapper {
+      position: fixed;
+      top: 4.5rem;
+      right: 1.5rem;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: sway 6s ease-in-out infinite alternate;
+      transform-origin: top center;
+      opacity: 0;
+      animation: sway 6s ease-in-out infinite alternate, fadeIn 0.8s ease forwards 1s;
+    }
+    @media (max-width: 900px) { .id-card-wrapper { display: none; } }
+
+    .id-strap {
+      width: 3px;
+      height: 60px;
+      background: var(--muted);
+      opacity: 0.5;
     }
     .id-card {
-      width:120px; height:180px;
-      background:var(--card);
-      border-radius:8px;
-      box-shadow:0 4px 15px rgba(0,0,0,.15);
-      padding:12px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      border:1px solid var(--border);
+      width: 110px;
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
     }
     .id-photo {
-      width:60px; height:60px;
-      border-radius:50%;
-      overflow:hidden;
-      border:2px solid var(--text);
-      margin-bottom:10px;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--accent);
     }
-    .id-photo img {
-      width:100%; height:100%;
-      object-fit:cover;
-    }
-    .id-text { text-align:center; margin-bottom:8px; }
-    .id-text h4 { margin:0; font-size:12px; font-weight:600; }
-    .id-text p { margin:3px 0; font-size:10px; color:var(--muted); }
-    .id-barcode {
-      width:100%; height:20px;
+    .id-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .id-name { font-size: 10px; font-weight: 600; text-align: center; color: var(--text); }
+    .id-role { font-size: 9px; color: var(--muted); text-align: center; line-height: 1.4; }
+    .id-bar {
+      width: 100%; height: 14px;
       background: repeating-linear-gradient(
-        0deg,
-        var(--text),
-        var(--text) 2px,
-        transparent 2px,
-        transparent 4px
+        90deg, var(--muted) 0px, var(--muted) 2px, transparent 2px, transparent 5px
       );
-      margin-top:auto;
-    }
-
-    @media (min-width:768px){
-      .hanging-card-wrapper { margin-top:1rem; }
-      .hanging-card-wrapper .strap { height:120px; }
-      .id-card { width:150px; height:220px; }
-      .id-photo { width:80px; height:80px; }
-      .id-text h4 { font-size:14px; }
-      .id-text p { font-size:11px; }
-      .id-barcode { height:30px; }
+      border-radius: 2px;
+      opacity: 0.4;
     }
 
     @keyframes sway {
-      0% { transform:rotate(-6deg); }
-      100% { transform:rotate(6deg); }
+      0%   { transform: rotate(-4deg); }
+      100% { transform: rotate(4deg); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* Smooth transitions */
+    @media (prefers-reduced-motion: no-preference) {
+      *, *::before, *::after {
+        transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+      }
     }
   </style>
 </head>
 <body id="top">
 
-<!-- 🪪 Hanging ID Card -->
-<div class="hanging-card-wrapper">
-  <div class="strap"></div>
+<!-- Floating orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ID Card -->
+<div class="id-card-wrapper">
+  <div class="id-strap"></div>
   <div class="id-card">
     <div class="id-photo">
-      <img src="https://placehold.co/80x80?text=Mack" alt="Mack's ID photo" />
+      <img src="https://placehold.co/80x80?text=M" alt="Mack" />
     </div>
-    <div class="id-text">
-      <h4>Mack Ndanina</h4>
-      <p>CS & Econ Student</p>
-      <p>University of Saskatchewan</p>
-    </div>
-    <div class="id-barcode"></div>
+    <div class="id-name">Mack Ndanina</div>
+    <div class="id-role">CS &amp; Econ<br>U of S</div>
+    <div class="id-bar"></div>
   </div>
 </div>
 
-<!-- Navigation -->
+<!-- Nav -->
 <nav id="main-nav">
-  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
     <i id="theme-icon" class="fas fa-moon"></i>
   </button>
   <div class="hamburger" onclick="toggleNav()">
@@ -282,91 +500,272 @@
 </nav>
 
 <main>
-  <section class="intro">
-    <h1>Mack Ndanina</h1>
-    <ul>
-      <li>Cs & Econ double major @ University of Saskatchewan</li>
-      <li>Ex project intern @ Association Jeunesse Fransaskoise (AJF)</li>
-      <li>currently:
-        <ul>
-          <li>building a mobile app for University of Saskatchewan students</li>
-          <li>developed freelance web development for a local construction company</li>
-          <li>developed a website for a student-led non-profit</li>
-        </ul>
-      </li>
-    </ul>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">Computer Science &amp; Economics — University of Saskatchewan</div>
+    <h1 id="hero-name"><span id="typed-name"></span><span class="cursor"></span></h1>
+    <p class="hero-sub">Upcoming fourth-year pursuing a double degree in Computer Science and Economics at the University of Saskatchewan. I'm drawn to the overlap between the two: using data and systems thinking to make sense of real-world problems, whether that's in markets, industries, or products. I care about doing good work, and I hold myself to a high standard in everything I build.</p>
 
-    <button onclick="location.href='projects.html'" class="resume-button">see what I've built</button>
-    <a href="Intership%20Prep%202026/Job%20resume%20(1).pdf" target="_blank" class="resume-button">→ view my resume</a>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="location.href='projects.html'">
+        <i class="fas fa-folder-open" style="font-size:13px"></i> See what I've built
+      </button>
+      <a href="Intership%20Prep%202026/Job%20resume%20(1).pdf" target="_blank" class="btn">
+        <i class="fas fa-arrow-up-right-from-square" style="font-size:11px"></i> Resume
+      </a>
+    </div>
   </section>
 
-  <footer id="contact">
-    <div class="signature-text">Mack Ndanina</div>
-    <div class="social-icons">
-      <a href="https://www.linkedin.com/in/mack-ndanina-367399303/"><i class="fab fa-linkedin"></i></a>
-      <a href="https://github.com/Mndanina1725"><i class="fab fa-github"></i></a>
-      <a href="mailto:mackbriand@gmail.com"><i class="fas fa-envelope"></i></a>
+  <!-- Currently -->
+  <section class="section" id="currently">
+    <div class="section-label">Currently</div>
+    <div class="currently-list">
+
+      <div class="currently-item">
+        <div class="currently-icon"><i class="fas fa-chart-bar"></i></div>
+        <div class="currently-body">
+          <div class="currently-title">Data Analyst Intern — College of Agriculture &amp; Bioresources, U of S</div>
+          <div class="currently-detail">Building an AI-assisted document understanding system and Tableau / Power BI dashboards.</div>
+        </div>
+      </div>
+
+      <div class="currently-item">
+        <div class="currently-icon"><i class="fas fa-globe"></i></div>
+        <div class="currently-body">
+          <div class="currently-title">Economic Intelligence Analyst — Western Economic Forum</div>
+          <div class="currently-detail">Working on an economic intelligence platform for Western Canadian industries.</div>
+        </div>
+      </div>
+
+      <div class="currently-item">
+        <div class="currently-icon"><i class="fas fa-microchip"></i></div>
+        <div class="currently-body">
+          <div class="currently-title">Student Network Representative — Artificial Intelligence Saskatchewan (AiSK)</div>
+          <div class="currently-detail">Connecting students with Saskatchewan's AI community.</div>
+        </div>
+      </div>
+
     </div>
-  </footer>
+  </section>
 </main>
 
-<script>
-  function toggleNav() {
-    const nav = document.getElementById('main-nav');
-    nav.classList.toggle('expanded');
-  }
-  document.querySelectorAll('nav a').forEach(link => {
-    link.addEventListener('click', () => {
-      document.getElementById('main-nav').classList.remove('expanded');
-    });
-  });
+<footer id="contact">
+  <div class="signature-text">Mack Ndanina</div>
+  <div class="social-icons">
+    <a href="https://www.linkedin.com/in/mack-ndanina-367399303/" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+    <a href="https://github.com/Mndanina1725" aria-label="GitHub"><i class="fab fa-github"></i></a>
+    <a href="mailto:mackbriand@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+  </div>
+  <div class="footer-note">Built by Mack · Saskatchewan</div>
+</footer>
 
-  // Theme toggle logic
+<script>
+  // Nav toggle
+  function toggleNav() {
+    document.getElementById('main-nav').classList.toggle('expanded');
+  }
+  document.querySelectorAll('nav a').forEach(l =>
+    l.addEventListener('click', () => document.getElementById('main-nav').classList.remove('expanded'))
+  );
+
+  // Theme
   (() => {
     const KEY = 'theme';
     const btn = document.getElementById('theme-toggle');
     const icon = document.getElementById('theme-icon');
     const root = document.documentElement;
-
-    function setIcon(theme){
-      if(theme === 'dark'){
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-      }
+    function setIcon(t) {
+      icon.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     }
-    function apply(theme){
-      root.setAttribute('data-theme', theme);
-      localStorage.setItem(KEY, theme);
-      setIcon(theme);
+    function apply(t) {
+      root.setAttribute('data-theme', t);
+      localStorage.setItem(KEY, t);
+      setIcon(t);
     }
-
-    // init icon
     setIcon(root.getAttribute('data-theme') || 'light');
-
-    btn?.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme') || 'light';
-      apply(current === 'dark' ? 'light' : 'dark');
+    btn.addEventListener('click', () => {
+      apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     });
-
-    // Follow system if user hasn't chosen
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    mq.addEventListener?.('change', e => {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       if (!localStorage.getItem(KEY)) apply(e.matches ? 'dark' : 'light');
     });
   })();
+
+  // Typewriter
+  (() => {
+    const el = document.getElementById('typed-name');
+    const text = 'Mack Ndanina';
+    let i = 0;
+    function type() {
+      if (i <= text.length) {
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(type, i === 1 ? 500 : 80);
+      }
+    }
+    type();
+  })();
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
 </script>
 
+<!-- Robot -->
+<style>
+  .robot-wrap {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: robotBob 3s ease-in-out infinite;
+    cursor: default;
+    user-select: none;
+  }
+  @keyframes robotBob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+  .robot-wrap:hover { animation-play-state: paused; }
+  .robot-wrap svg { overflow: visible; }
+
+  /* Wave tooltip */
+  .robot-tip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  .robot-wrap:hover .robot-tip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<div class="robot-wrap" id="robot">
+  <div class="robot-tip">hey 👋</div>
+  <svg id="robot-svg" width="108" height="144" viewBox="0 0 72 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Antenna -->
+    <line x1="36" y1="0" x2="36" y2="14" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="36" cy="0" r="3.5" fill="var(--accent)"/>
+
+    <!-- Head -->
+    <rect x="10" y="14" width="52" height="38" rx="10" fill="var(--card)" stroke="var(--border)" stroke-width="1.5"/>
+
+    <!-- Left eye socket -->
+    <circle cx="24" cy="33" r="8" fill="var(--tag-bg)"/>
+    <!-- Right eye socket -->
+    <circle cx="48" cy="33" r="8" fill="var(--tag-bg)"/>
+
+    <!-- Left pupil -->
+    <circle id="pupil-l" cx="24" cy="33" r="4" fill="var(--accent)"/>
+    <!-- Right pupil -->
+    <circle id="pupil-r" cx="48" cy="33" r="4" fill="var(--accent)"/>
+
+    <!-- Pupil shine -->
+    <circle id="shine-l" cx="26" cy="31" r="1.2" fill="white" opacity="0.7"/>
+    <circle id="shine-r" cx="50" cy="31" r="1.2" fill="white" opacity="0.7"/>
+
+    <!-- Mouth -->
+    <rect x="22" y="44" width="28" height="4" rx="2" fill="var(--border)"/>
+    <!-- Mouth LED dots -->
+    <circle cx="28" cy="46" r="1.5" fill="var(--accent)" opacity="0.6"/>
+    <circle cx="36" cy="46" r="1.5" fill="var(--accent)" opacity="0.6"/>
+    <circle cx="44" cy="46" r="1.5" fill="var(--accent)" opacity="0.6"/>
+
+    <!-- Body -->
+    <rect x="14" y="56" width="44" height="32" rx="8" fill="var(--card)" stroke="var(--border)" stroke-width="1.5"/>
+
+    <!-- Body panel lines -->
+    <rect x="22" y="63" width="28" height="3" rx="1.5" fill="var(--tag-bg)"/>
+    <rect x="22" y="70" width="18" height="3" rx="1.5" fill="var(--tag-bg)"/>
+
+    <!-- Chest LED -->
+    <circle cx="36" cy="79" r="4" fill="var(--accent)" opacity="0.5" id="chest-led"/>
+
+    <!-- Arms -->
+    <rect x="0" y="58" width="12" height="22" rx="6" fill="var(--card)" stroke="var(--border)" stroke-width="1.5"/>
+    <rect x="60" y="58" width="12" height="22" rx="6" fill="var(--card)" stroke="var(--border)" stroke-width="1.5"/>
+
+    <!-- Feet -->
+    <rect x="16" y="87" width="14" height="9" rx="4" fill="var(--card)" stroke="var(--border)" stroke-width="1.5"/>
+    <rect x="42" y="87" width="14" height="9" rx="4" fill="var(--card)" stroke="var(--border)" stroke-width="1.5"/>
+  </svg>
+</div>
+
+<script>
+  (() => {
+    const robotEl = document.getElementById('robot');
+    const pupilL  = document.getElementById('pupil-l');
+    const pupilR  = document.getElementById('pupil-r');
+    const shineL  = document.getElementById('shine-l');
+    const shineR  = document.getElementById('shine-r');
+    const led     = document.getElementById('chest-led');
+
+    // Eye socket centers in SVG space (world coords depend on robot position)
+    const eyes = [
+      { el: pupilL, shine: shineL, ox: 24, oy: 33 },
+      { el: pupilR, shine: shineR, ox: 48, oy: 33 },
+    ];
+
+    const MAX_TRAVEL = 3.5; // max pupil offset in SVG units
+
+    function trackMouse(e) {
+      const rect = robotEl.getBoundingClientRect();
+      const svgRect = robotEl.querySelector('svg').getBoundingClientRect();
+
+      // Scale factor from SVG units to px
+      const scaleX = svgRect.width  / 72;
+      const scaleY = svgRect.height / 96;
+
+      eyes.forEach(eye => {
+        // Eye center in page px
+        const ecx = svgRect.left + eye.ox * scaleX;
+        const ecy = svgRect.top  + eye.oy * scaleY;
+
+        const dx = e.clientX - ecx;
+        const dy = e.clientY - ecy;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        const travel = Math.min(dist / 60, 1) * MAX_TRAVEL;
+        const px = (dx / dist) * travel;
+        const py = (dy / dist) * travel;
+
+        eye.el.setAttribute('cx', eye.ox + px);
+        eye.el.setAttribute('cy', eye.oy + py);
+        eye.shine.setAttribute('cx', eye.ox + px + 2);
+        eye.shine.setAttribute('cy', eye.oy + py - 2);
+      });
+    }
+
+    document.addEventListener('mousemove', trackMouse);
+
+    // Chest LED pulse on click
+    document.addEventListener('click', () => {
+      led.style.opacity = '1';
+      led.style.transition = 'opacity 0.05s';
+      setTimeout(() => {
+        led.style.opacity = '0.5';
+        led.style.transition = 'opacity 0.6s';
+      }, 80);
+    });
+  })();
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
